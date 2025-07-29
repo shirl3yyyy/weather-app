@@ -9,17 +9,18 @@ const App = () => {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState('');
 
-  const API_KEY = ecd7799fbf9b4036b3172426253007; //weather API key
+  const API_KEY = "ecd7799fbf9b4036b3172426253007"; //weather API key
 
 const fetchWeather = async () => {
   if (!city) {
     setError('Please enter a city name');
     return;
-
+  }
     try{
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+      const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}`);
+
       if (!response.ok) {
-        alert('City not found');
+        setError('City not found');
         setWeather(null);
         return;
       }
@@ -27,6 +28,8 @@ const fetchWeather = async () => {
 
       const data = await response.json();
       setWeather(data);
+      setError(''); //remove previous error
+
     }catch (error){
       console.error("Error fetching weather:", error); // for the developer
       alert("Something went wrong. Please try again.") // for the user
@@ -41,11 +44,8 @@ const fetchWeather = async () => {
       {error && <ErrorMessage message={error} />}
       {weather && <WeatherCard weather={weather} />}
       </div>
-  );
-        
-    }
-  }
-
-
+    );
+  };
+  
 
 export default App
